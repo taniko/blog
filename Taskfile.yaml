@@ -1,0 +1,16 @@
+version: '3'
+tasks:
+  default:
+    cmds:
+      - task: lint
+      - task: test
+
+  test:
+    cmd: go test ./...
+
+  lint:
+    cmds:
+      - staticcheck ./...
+
+  generate:go:
+    cmd: go generate ./...
