@@ -2,3 +2,5 @@ vendor
 .task
 .envrc
 .env
+.firebaserc
+*.log

@@ -14,3 +14,6 @@ tasks:
 
   generate:go:
     cmd: go generate ./...
+
+  emulators:start:
+    cmd: firebase emulators:start --project demo
