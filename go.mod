@@ -6,7 +6,7 @@ require (
 	connectrpc.com/connect v1.14.0
 	firebase.google.com/go/v4 v4.13.0
 	github.com/cockroachdb/errors v1.11.1
-	github.com/google/uuid v1.3.0
+	github.com/google/uuid v1.6.0
 	github.com/samber/mo v1.11.0
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/mock v0.4.0
