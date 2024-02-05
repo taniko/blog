@@ -25,6 +25,10 @@ type (
 	}
 )
 
+func (c CreateEvent) GetAuthorID() vo.AuthorID {
+	return c.GetPayload().Author
+}
+
 func (c CreateEvent) GetArticleID() vo.ID {
 	return c.GetPayload().ID
 }

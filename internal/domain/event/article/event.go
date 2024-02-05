@@ -8,6 +8,7 @@ import (
 type Event interface {
 	internal()
 	event.Event
+	GetAuthorID() vo.AuthorID
 	GetArticleID() vo.ID
 }
 

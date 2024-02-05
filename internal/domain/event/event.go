@@ -1,6 +1,7 @@
 package event
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/google/uuid"
@@ -68,4 +69,20 @@ func (h header) Next(name Name) Header {
 
 func IssueID() ID {
 	return ID(uuid.New().String())
+}
+
+func (v Version) Int() int {
+	return int(v)
+}
+
+func (v Version) String() string {
+	return strconv.Itoa(v.Int())
+}
+
+func (v ID) String() string {
+	return string(v)
+}
+
+func (n Name) String() string {
+	return string(n)
 }
