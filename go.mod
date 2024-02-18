@@ -4,7 +4,7 @@ go 1.22.0
 
 require (
 	cloud.google.com/go/firestore v1.14.0
-	connectrpc.com/connect v1.14.0
+	connectrpc.com/connect v1.15.0
 	firebase.google.com/go/v4 v4.13.0
 	github.com/cockroachdb/errors v1.11.1
 	github.com/google/uuid v1.6.0
