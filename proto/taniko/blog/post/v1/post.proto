@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package taniko.blog.post.v1;
+
+service PostService {
+
+}

@@ -13,7 +13,10 @@ tasks:
       - staticcheck ./...
 
   generate:go:
-    cmd: go generate ./...
+    cmds:
+      - go generate ./...
+      - buf generate
+      - go mod tidy
 
   emulators:start:
     cmd: firebase emulators:start --project demo
