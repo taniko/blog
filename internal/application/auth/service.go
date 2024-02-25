@@ -10,7 +10,7 @@ import (
 )
 
 type Service interface {
-	Verify(ctx context.Context, token string) mo.Result[vo.ID]
+	Verify(ctx context.Context, token string) mo.Result[vo.UserID]
 }
 
 type service struct {
@@ -21,10 +21,10 @@ func NewService(c *auth.Client) Service {
 	return &service{c: c}
 }
 
-func (s service) Verify(ctx context.Context, in string) mo.Result[vo.ID] {
+func (s service) Verify(ctx context.Context, in string) mo.Result[vo.UserID] {
 	token, err := s.c.VerifyIDToken(ctx, in)
 	if err != nil {
-		return mo.Err[vo.ID](errors.Wrap(err, "failed to verify token"))
+		return mo.Err[vo.UserID](errors.Wrap(err, "failed to verify token"))
 	}
-	return mo.Ok(vo.ID(token.UID))
+	return mo.Ok(vo.UserID(token.UID))
 }
