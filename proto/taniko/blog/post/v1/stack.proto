@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package taniko.blog.post.v1;
+
+import "google/type/datetime.proto";
+
+message CreateStackChannelRequest {
+  string name = 1;
+  string description = 2;
+}
+
+message CreateStackChannelResponse {
+  string id = 1;
+  google.type.DateTime created_at = 2;
+}
+
+message StackChannel {
+  string id = 1;
+  string author = 2;
+  string name = 3;
+  string description = 4;
+  google.type.DateTime created_at = 5;
+}
+
+message StackComment {
+  string id = 1;
+  string stack_id = 2;
+  string message = 3;
+  google.type.DateTime created_at = 4;
+}
+
+message CreateStackRequest {
+  string stack_id = 1;
+  string message = 2;
+}
+
+message CreateStackResponse {
+  string id = 1;
+  google.type.DateTime created_at = 2;
+}
+
+message ListStacksRequest {
+  string user_id = 1;
+}
+
+message ListStacksResponse {
+  repeated StackChannel stacks = 1;
+}
+
+message GetStackMessagesRequest {
+  string stack_id = 1;
+}
+
+message GetStackMessagesResponse {
+  repeated StackComment messages = 1;
+}

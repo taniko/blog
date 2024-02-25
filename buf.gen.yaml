@@ -3,6 +3,8 @@ managed:
   enabled: true
   go_package_prefix:
     default: github.com/taniko/blog/internal/gen
+    except:
+      - buf.build/googleapis/googleapis
 plugins:
   - plugin: go
     out: internal/gen

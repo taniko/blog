@@ -6,8 +6,11 @@ package postv1connect
 
 import (
 	connect "connectrpc.com/connect"
+	context "context"
+	errors "errors"
 	v1 "github.com/taniko/blog/internal/gen/taniko/blog/post/v1"
 	http "net/http"
+	strings "strings"
 )
 
 // This is a compile-time assertion to ensure that this generated file and the connect package are
@@ -22,13 +25,41 @@ const (
 	PostServiceName = "taniko.blog.post.v1.PostService"
 )
 
+// These constants are the fully-qualified names of the RPCs defined in this package. They're
+// exposed at runtime as Spec.Procedure and as the final two segments of the HTTP route.
+//
+// Note that these are different from the fully-qualified method names used by
+// google.golang.org/protobuf/reflect/protoreflect. To convert from these constants to
+// reflection-formatted method names, remove the leading slash and convert the remaining slash to a
+// period.
+const (
+	// PostServiceCreateStackChannelProcedure is the fully-qualified name of the PostService's
+	// CreateStackChannel RPC.
+	PostServiceCreateStackChannelProcedure = "/taniko.blog.post.v1.PostService/CreateStackChannel"
+	// PostServiceCreateStackProcedure is the fully-qualified name of the PostService's CreateStack RPC.
+	PostServiceCreateStackProcedure = "/taniko.blog.post.v1.PostService/CreateStack"
+	// PostServiceListStacksProcedure is the fully-qualified name of the PostService's ListStacks RPC.
+	PostServiceListStacksProcedure = "/taniko.blog.post.v1.PostService/ListStacks"
+	// PostServiceGetStackMessagesProcedure is the fully-qualified name of the PostService's
+	// GetStackMessages RPC.
+	PostServiceGetStackMessagesProcedure = "/taniko.blog.post.v1.PostService/GetStackMessages"
+)
+
 // These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
 var (
-	postServiceServiceDescriptor = v1.File_taniko_blog_post_v1_post_proto.Services().ByName("PostService")
+	postServiceServiceDescriptor                  = v1.File_taniko_blog_post_v1_post_proto.Services().ByName("PostService")
+	postServiceCreateStackChannelMethodDescriptor = postServiceServiceDescriptor.Methods().ByName("CreateStackChannel")
+	postServiceCreateStackMethodDescriptor        = postServiceServiceDescriptor.Methods().ByName("CreateStack")
+	postServiceListStacksMethodDescriptor         = postServiceServiceDescriptor.Methods().ByName("ListStacks")
+	postServiceGetStackMessagesMethodDescriptor   = postServiceServiceDescriptor.Methods().ByName("GetStackMessages")
 )
 
 // PostServiceClient is a client for the taniko.blog.post.v1.PostService service.
 type PostServiceClient interface {
+	CreateStackChannel(context.Context, *connect.Request[v1.CreateStackChannelRequest]) (*connect.Response[v1.CreateStackChannelResponse], error)
+	CreateStack(context.Context, *connect.Request[v1.CreateStackRequest]) (*connect.Response[v1.CreateStackResponse], error)
+	ListStacks(context.Context, *connect.Request[v1.ListStacksRequest]) (*connect.Response[v1.ListStacksResponse], error)
+	GetStackMessages(context.Context, *connect.Request[v1.GetStackMessagesRequest]) (*connect.Response[v1.GetStackMessagesResponse], error)
 }
 
 // NewPostServiceClient constructs a client for the taniko.blog.post.v1.PostService service. By
@@ -39,15 +70,69 @@ type PostServiceClient interface {
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
 func NewPostServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) PostServiceClient {
-	return &postServiceClient{}
+	baseURL = strings.TrimRight(baseURL, "/")
+	return &postServiceClient{
+		createStackChannel: connect.NewClient[v1.CreateStackChannelRequest, v1.CreateStackChannelResponse](
+			httpClient,
+			baseURL+PostServiceCreateStackChannelProcedure,
+			connect.WithSchema(postServiceCreateStackChannelMethodDescriptor),
+			connect.WithClientOptions(opts...),
+		),
+		createStack: connect.NewClient[v1.CreateStackRequest, v1.CreateStackResponse](
+			httpClient,
+			baseURL+PostServiceCreateStackProcedure,
+			connect.WithSchema(postServiceCreateStackMethodDescriptor),
+			connect.WithClientOptions(opts...),
+		),
+		listStacks: connect.NewClient[v1.ListStacksRequest, v1.ListStacksResponse](
+			httpClient,
+			baseURL+PostServiceListStacksProcedure,
+			connect.WithSchema(postServiceListStacksMethodDescriptor),
+			connect.WithClientOptions(opts...),
+		),
+		getStackMessages: connect.NewClient[v1.GetStackMessagesRequest, v1.GetStackMessagesResponse](
+			httpClient,
+			baseURL+PostServiceGetStackMessagesProcedure,
+			connect.WithSchema(postServiceGetStackMessagesMethodDescriptor),
+			connect.WithClientOptions(opts...),
+		),
+	}
 }
 
 // postServiceClient implements PostServiceClient.
 type postServiceClient struct {
+	createStackChannel *connect.Client[v1.CreateStackChannelRequest, v1.CreateStackChannelResponse]
+	createStack        *connect.Client[v1.CreateStackRequest, v1.CreateStackResponse]
+	listStacks         *connect.Client[v1.ListStacksRequest, v1.ListStacksResponse]
+	getStackMessages   *connect.Client[v1.GetStackMessagesRequest, v1.GetStackMessagesResponse]
+}
+
+// CreateStackChannel calls taniko.blog.post.v1.PostService.CreateStackChannel.
+func (c *postServiceClient) CreateStackChannel(ctx context.Context, req *connect.Request[v1.CreateStackChannelRequest]) (*connect.Response[v1.CreateStackChannelResponse], error) {
+	return c.createStackChannel.CallUnary(ctx, req)
+}
+
+// CreateStack calls taniko.blog.post.v1.PostService.CreateStack.
+func (c *postServiceClient) CreateStack(ctx context.Context, req *connect.Request[v1.CreateStackRequest]) (*connect.Response[v1.CreateStackResponse], error) {
+	return c.createStack.CallUnary(ctx, req)
+}
+
+// ListStacks calls taniko.blog.post.v1.PostService.ListStacks.
+func (c *postServiceClient) ListStacks(ctx context.Context, req *connect.Request[v1.ListStacksRequest]) (*connect.Response[v1.ListStacksResponse], error) {
+	return c.listStacks.CallUnary(ctx, req)
+}
+
+// GetStackMessages calls taniko.blog.post.v1.PostService.GetStackMessages.
+func (c *postServiceClient) GetStackMessages(ctx context.Context, req *connect.Request[v1.GetStackMessagesRequest]) (*connect.Response[v1.GetStackMessagesResponse], error) {
+	return c.getStackMessages.CallUnary(ctx, req)
 }
 
 // PostServiceHandler is an implementation of the taniko.blog.post.v1.PostService service.
 type PostServiceHandler interface {
+	CreateStackChannel(context.Context, *connect.Request[v1.CreateStackChannelRequest]) (*connect.Response[v1.CreateStackChannelResponse], error)
+	CreateStack(context.Context, *connect.Request[v1.CreateStackRequest]) (*connect.Response[v1.CreateStackResponse], error)
+	ListStacks(context.Context, *connect.Request[v1.ListStacksRequest]) (*connect.Response[v1.ListStacksResponse], error)
+	GetStackMessages(context.Context, *connect.Request[v1.GetStackMessagesRequest]) (*connect.Response[v1.GetStackMessagesResponse], error)
 }
 
 // NewPostServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -56,8 +141,40 @@ type PostServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewPostServiceHandler(svc PostServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	postServiceCreateStackChannelHandler := connect.NewUnaryHandler(
+		PostServiceCreateStackChannelProcedure,
+		svc.CreateStackChannel,
+		connect.WithSchema(postServiceCreateStackChannelMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
+	)
+	postServiceCreateStackHandler := connect.NewUnaryHandler(
+		PostServiceCreateStackProcedure,
+		svc.CreateStack,
+		connect.WithSchema(postServiceCreateStackMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
+	)
+	postServiceListStacksHandler := connect.NewUnaryHandler(
+		PostServiceListStacksProcedure,
+		svc.ListStacks,
+		connect.WithSchema(postServiceListStacksMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
+	)
+	postServiceGetStackMessagesHandler := connect.NewUnaryHandler(
+		PostServiceGetStackMessagesProcedure,
+		svc.GetStackMessages,
+		connect.WithSchema(postServiceGetStackMessagesMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/taniko.blog.post.v1.PostService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
+		case PostServiceCreateStackChannelProcedure:
+			postServiceCreateStackChannelHandler.ServeHTTP(w, r)
+		case PostServiceCreateStackProcedure:
+			postServiceCreateStackHandler.ServeHTTP(w, r)
+		case PostServiceListStacksProcedure:
+			postServiceListStacksHandler.ServeHTTP(w, r)
+		case PostServiceGetStackMessagesProcedure:
+			postServiceGetStackMessagesHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -66,3 +183,19 @@ func NewPostServiceHandler(svc PostServiceHandler, opts ...connect.HandlerOption
 
 // UnimplementedPostServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedPostServiceHandler struct{}
+
+func (UnimplementedPostServiceHandler) CreateStackChannel(context.Context, *connect.Request[v1.CreateStackChannelRequest]) (*connect.Response[v1.CreateStackChannelResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("taniko.blog.post.v1.PostService.CreateStackChannel is not implemented"))
+}
+
+func (UnimplementedPostServiceHandler) CreateStack(context.Context, *connect.Request[v1.CreateStackRequest]) (*connect.Response[v1.CreateStackResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("taniko.blog.post.v1.PostService.CreateStack is not implemented"))
+}
+
+func (UnimplementedPostServiceHandler) ListStacks(context.Context, *connect.Request[v1.ListStacksRequest]) (*connect.Response[v1.ListStacksResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("taniko.blog.post.v1.PostService.ListStacks is not implemented"))
+}
+
+func (UnimplementedPostServiceHandler) GetStackMessages(context.Context, *connect.Request[v1.GetStackMessagesRequest]) (*connect.Response[v1.GetStackMessagesResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("taniko.blog.post.v1.PostService.GetStackMessages is not implemented"))
+}

@@ -11,6 +11,7 @@ require (
 	github.com/samber/mo v1.11.0
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/mock v0.4.0
+	google.golang.org/genproto v0.0.0-20240213162025-012b6fc9bca9
 	google.golang.org/protobuf v1.32.0
 )
 
@@ -58,7 +59,6 @@ require (
 	google.golang.org/api v0.165.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/appengine/v2 v2.0.5 // indirect
-	google.golang.org/genproto v0.0.0-20240213162025-012b6fc9bca9 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240213162025-012b6fc9bca9 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240213162025-012b6fc9bca9 // indirect
 	google.golang.org/grpc v1.61.1 // indirect
