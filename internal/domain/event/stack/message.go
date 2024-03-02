@@ -13,3 +13,19 @@ type CreateMessageEvent struct {
 	content   vo.Content
 	createdAt time.Time
 }
+
+func (e CreateMessageEvent) ID() vo.MessageID {
+	return e.id
+}
+
+func (e CreateMessageEvent) ChannelID() vo.ChannelID {
+	return e.channelID
+}
+
+func (e CreateMessageEvent) Content() vo.Content {
+	return e.content
+}
+
+func (e CreateMessageEvent) CreatedAt() time.Time {
+	return e.createdAt
+}
