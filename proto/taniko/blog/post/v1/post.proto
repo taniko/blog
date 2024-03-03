@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package taniko.blog.post.v1;
+
+import "taniko/blog/post/v1/stack.proto";
+
+service PostService {
+  rpc CreateStackChannel(CreateStackChannelRequest) returns (CreateStackChannelResponse);
+  rpc CreateStack(CreateStackRequest) returns (CreateStackResponse);
+  rpc ListStacks(ListStacksRequest) returns (ListStacksResponse);
+  rpc GetStackMessages(GetStackMessagesRequest) returns (GetStackMessagesResponse);
+}
