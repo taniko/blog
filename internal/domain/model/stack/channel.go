@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/taniko/blog/internal/domain/event"
 	"github.com/taniko/blog/internal/domain/event/stack"
 	"github.com/taniko/blog/internal/domain/model/post"
 	"github.com/taniko/blog/internal/domain/model/stack/vo"
@@ -18,9 +19,9 @@ type Channel struct {
 
 func CreateChannel(author post.AuthorID, name vo.Name, description vo.Description) (Channel, stack.CreateChannelEvent, error) {
 	if name == "" {
-		return Channel{}, stack.CreateChannelEvent{}, ErrEmptyName
+		return Channel{}, nil, ErrEmptyName
 	} else if description == "" {
-		return Channel{}, stack.CreateChannelEvent{}, ErrEmptyDescription
+		return Channel{}, nil, ErrEmptyDescription
 	}
 	id := vo.ChannelID(uuid.New().String())
 	createdAt := time.Now()
@@ -30,6 +31,12 @@ func CreateChannel(author post.AuthorID, name vo.Name, description vo.Descriptio
 		description: description,
 		createdAt:   createdAt,
 	}
-	event := stack.NewCreateChannelEvent(id, name, author, description, createdAt)
-	return channel, event, nil
+	e := stack.NewCreateChannelEvent(
+		event.NewHeader(event.IssueID(), createdAt, 1),
+		id,
+		name,
+		author,
+		description,
+	)
+	return channel, e, nil
 }

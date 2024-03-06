@@ -14,8 +14,8 @@ import (
 	reflect "reflect"
 
 	mo "github.com/samber/mo"
-	stack "github.com/taniko/blog/internal/domain/event/stack"
-	stack0 "github.com/taniko/blog/internal/domain/model/stack"
+	event "github.com/taniko/blog/internal/domain/event"
+	stack "github.com/taniko/blog/internal/domain/model/stack"
 	vo "github.com/taniko/blog/internal/domain/model/stack/vo"
 	gomock "go.uber.org/mock/gomock"
 )
@@ -44,10 +44,10 @@ func (m *MockStack) EXPECT() *MockStackMockRecorder {
 }
 
 // FindChannel mocks base method.
-func (m *MockStack) FindChannel(ctx context.Context, id vo.ChannelID) mo.Result[stack0.Channel] {
+func (m *MockStack) FindChannel(ctx context.Context, id vo.ChannelID) mo.Result[stack.Channel] {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindChannel", ctx, id)
-	ret0, _ := ret[0].(mo.Result[stack0.Channel])
+	ret0, _ := ret[0].(mo.Result[stack.Channel])
 	return ret0
 }
 
@@ -58,10 +58,10 @@ func (mr *MockStackMockRecorder) FindChannel(ctx, id any) *gomock.Call {
 }
 
 // GetMessages mocks base method.
-func (m *MockStack) GetMessages(ctx context.Context, channelID vo.ChannelID) mo.Result[[]stack0.Message] {
+func (m *MockStack) GetMessages(ctx context.Context, channelID vo.ChannelID) mo.Result[[]stack.Message] {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetMessages", ctx, channelID)
-	ret0, _ := ret[0].(mo.Result[[]stack0.Message])
+	ret0, _ := ret[0].(mo.Result[[]stack.Message])
 	return ret0
 }
 
@@ -72,7 +72,7 @@ func (mr *MockStackMockRecorder) GetMessages(ctx, channelID any) *gomock.Call {
 }
 
 // Save mocks base method.
-func (m *MockStack) Save(ctx context.Context, events []stack.Event) error {
+func (m *MockStack) Save(ctx context.Context, events []event.Event) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Save", ctx, events)
 	ret0, _ := ret[0].(error)

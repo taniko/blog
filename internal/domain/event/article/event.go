@@ -6,12 +6,11 @@ import (
 )
 
 type Event interface {
-	internal()
 	event.Event
+
+	// GetAuthorID 作成者IDを取得
 	GetAuthorID() vo.AuthorID
+
+	// GetArticleID 記事IDを取得
 	GetArticleID() vo.ID
 }
-
-type unimplemented struct{}
-
-func (unimplemented) internal() {}

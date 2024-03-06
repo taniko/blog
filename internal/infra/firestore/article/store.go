@@ -34,7 +34,7 @@ func (a articleStore) Store(ctx context.Context, e event.Event) error {
 	}
 	_, err := a.lookupArticleDoc(e).
 		Collection("events").
-		Doc(e.GetHeader().GetVersion().String()).
+		Doc(e.GetEventHeader().GetVersion().String()).
 		Set(ctx, data)
 	if err != nil {
 		return err

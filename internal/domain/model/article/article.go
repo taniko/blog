@@ -3,6 +3,7 @@ package article
 import (
 	"time"
 
+	"github.com/taniko/blog/internal/domain/event"
 	"github.com/taniko/blog/internal/domain/event/article"
 	"github.com/taniko/blog/internal/domain/model/article/vo"
 )
@@ -28,5 +29,5 @@ func New(id vo.ID, author vo.AuthorID, title vo.Title, body vo.Body) *Article {
 }
 
 func Create(author vo.AuthorID, title vo.Title, body vo.Body) article.CreateEvent {
-	return article.NewCreateEvent(author, title, body)
+	return article.NewCreateEvent(event.NewHeader(event.IssueID(), time.Now(), 1), author, title, body)
 }

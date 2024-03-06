@@ -5,7 +5,7 @@ import (
 
 	"github.com/cockroachdb/errors"
 	"github.com/taniko/blog/internal/application/stack/command"
-	event2 "github.com/taniko/blog/internal/domain/event/stack"
+	"github.com/taniko/blog/internal/domain/event"
 	"github.com/taniko/blog/internal/domain/model/post"
 	"github.com/taniko/blog/internal/domain/model/stack"
 	"github.com/taniko/blog/internal/domain/model/stack/vo"
@@ -39,11 +39,12 @@ func (a application) CreateChannel(ctx context.Context, cmd command.CreateChanne
 	}
 
 	author := post.AuthorID(userID)
-	_, event, err := stack.CreateChannel(author, vo.Name(cmd.Name), vo.Description(cmd.Description))
+
+	_, e, err := stack.CreateChannel(author, vo.Name(cmd.Name), vo.Description(cmd.Description))
 	if err != nil {
 		return errors.Wrap(err, "create channel")
 	}
-	if err := a.stackRepository.Save(ctx, []event2.Event{event}); err != nil {
+	if err := a.stackRepository.Save(ctx, []event.Event{e}); err != nil {
 		return errors.Wrap(err, "save event")
 	}
 	return nil
