@@ -18,11 +18,14 @@ type (
 		GetID() ID
 		GetTime() time.Time
 		GetVersion() Version
-		GetName() Name
-		Next(name Name) Header
+		Next() Header
 	}
 	Event interface {
-		GetHeader() Header
+		// GetEventHeader イベントヘッダーを取得
+		GetEventHeader() Header
+
+		// GetEventName イベント名を取得
+		GetEventName() Name
 	}
 )
 
@@ -30,24 +33,18 @@ type header struct {
 	id      ID
 	time    time.Time
 	version Version
-	name    Name
 }
 
-func NewHeader(id ID, time time.Time, version Version, name Name) Header {
+func NewHeader(id ID, time time.Time, version Version) Header {
 	return header{
 		id:      id,
 		time:    time,
-		name:    name,
 		version: version,
 	}
 }
 
 func (h header) GetID() ID {
 	return h.id
-}
-
-func (h header) GetName() Name {
-	return h.name
 }
 
 func (h header) GetTime() time.Time {
@@ -58,12 +55,11 @@ func (h header) GetVersion() Version {
 	return h.version
 }
 
-func (h header) Next(name Name) Header {
+func (h header) Next() Header {
 	return header{
-		id:      h.id,
+		id:      IssueID(),
 		time:    time.Now(),
 		version: h.version + 1,
-		name:    name,
 	}
 }
 

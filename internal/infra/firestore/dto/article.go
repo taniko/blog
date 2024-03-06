@@ -14,9 +14,9 @@ type CreateArticle struct {
 
 func NewCreateArticle(e article.CreateEvent) CreateArticle {
 	return CreateArticle{
-		EventHeader: NewEventHeader(e.GetHeader()),
-		ArticleID:   e.GetArticleID().String(),
-		Author:      e.GetAuthorID().String(),
+		EventHeader: NewEventHeader(e.GetEventHeader()),
+		ArticleID:   e.GetPayload().Author.String(),
+		Author:      e.GetPayload().Author.String(),
 		Title:       string(e.GetPayload().Title),
 		Body:        string(e.GetPayload().Body),
 	}

@@ -2,7 +2,6 @@ package stack
 
 import (
 	"context"
-	"fmt"
 	"testing"
 	"time"
 
@@ -10,9 +9,10 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/taniko/blog/internal/application/stack/command"
-	"github.com/taniko/blog/internal/domain/event/stack"
+	"github.com/taniko/blog/internal/domain/event"
+	stackevent "github.com/taniko/blog/internal/domain/event/stack"
 	"github.com/taniko/blog/internal/domain/model/post"
-	stack2 "github.com/taniko/blog/internal/domain/model/stack"
+	"github.com/taniko/blog/internal/domain/model/stack"
 	vo2 "github.com/taniko/blog/internal/domain/model/stack/vo"
 	"github.com/taniko/blog/internal/domain/model/user"
 	"github.com/taniko/blog/internal/domain/model/user/vo"
@@ -56,7 +56,7 @@ func TestApplication_CreateChannel(t *testing.T) {
 				Name:        "",
 				Description: uuid.NewString(),
 			},
-			wantErr: stack2.ErrEmptyName,
+			wantErr: stack.ErrEmptyName,
 		}, {
 			name:   "empty description",
 			author: vo.UserID(uuid.NewString()),
@@ -64,13 +64,13 @@ func TestApplication_CreateChannel(t *testing.T) {
 				Name:        "test",
 				Description: "",
 			},
-			wantErr: stack2.ErrEmptyDescription,
+			wantErr: stack.ErrEmptyDescription,
 		},
 	}
 
-	var events []stack.Event
+	var events []event.Event
 	repo := mock.NewMockStack(ctrl)
-	repo.EXPECT().Save(gomock.Any(), gomock.Any()).DoAndReturn(func(ctx context.Context, es []stack.Event) error {
+	repo.EXPECT().Save(gomock.Any(), gomock.Any()).DoAndReturn(func(ctx context.Context, es []event.Event) error {
 		events = es
 		return nil
 	}).AnyTimes()
@@ -80,7 +80,6 @@ func TestApplication_CreateChannel(t *testing.T) {
 			now := time.Now()
 			ctx := context.Background()
 			if tt.author != "" {
-				fmt.Println(ctxutil.GetUserID(ctx))
 				ctx = ctxutil.WithValue(ctx, tt.author)
 			}
 			err := app.CreateChannel(ctx, tt.cmd)
@@ -94,12 +93,12 @@ func TestApplication_CreateChannel(t *testing.T) {
 			}
 			assert.NoError(t, err)
 			assert.Len(t, events, 1)
-			e, ok := events[0].(stack.CreateChannelEvent)
+			e, ok := events[0].(stackevent.CreateChannelEvent)
 			assert.True(t, ok)
 			assert.Equal(t, vo2.Name(tt.cmd.Name), e.Name())
 			assert.Equal(t, post.AuthorID(tt.author), e.AuthorID())
-			assert.Greater(t, e.CreatedAt(), now)
-			assert.NotEqual(t, "", e.ID())
+			assert.Greater(t, e.GetEventHeader().GetTime(), now)
+			assert.NotEqual(t, "", e.GetEventHeader().GetID())
 		})
 	}
 }

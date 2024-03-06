@@ -6,7 +6,7 @@ import (
 	"context"
 
 	"github.com/samber/mo"
-	event "github.com/taniko/blog/internal/domain/event/stack"
+	"github.com/taniko/blog/internal/domain/event"
 	"github.com/taniko/blog/internal/domain/model/stack"
 	"github.com/taniko/blog/internal/domain/model/stack/vo"
 )
